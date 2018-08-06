@@ -39,6 +39,8 @@ from .context import Context
 from .errors import CommandNotFound, CommandError
 from .formatter import HelpFormatter
 
+from typing import TypeVar
+
 def when_mentioned(bot, msg):
     """A callable that implements a command prefix equivalent to being mentioned.
 
@@ -145,7 +147,9 @@ async def _default_help_command(ctx, *commands : str):
     for page in pages:
         await destination.send(page)
 
-class BotBase(GroupMixin):
+CT = TypeVar('CT', bound=Context)
+
+class BotBase(GroupMixin[CT]):
     def __init__(self, command_prefix, formatter=None, description=None, pm_help=False, **options):
         super().__init__(**options)
         self.command_prefix = command_prefix
@@ -927,7 +931,7 @@ class BotBase(GroupMixin):
     async def on_message(self, message):
         await self.process_commands(message)
 
-class Bot(BotBase, discord.Client):
+class Bot(BotBase[CT], discord.Client):
     """Represents a discord bot.
 
     This class is a subclass of :class:`discord.Client` and as a result
@@ -1016,7 +1020,7 @@ class Bot(BotBase, discord.Client):
     """
     pass
 
-class AutoShardedBot(BotBase, discord.AutoShardedClient):
+class AutoShardedBot(BotBase[CT], discord.AutoShardedClient):
     """This is similar to :class:`.Bot` except that it is derived from
     :class:`discord.AutoShardedClient` instead.
     """

@@ -43,7 +43,8 @@ with open('README.rst') as f:
 
 extras_require = {
     'voice': ['PyNaCl==1.1.2'],
-    'docs': ['sphinxcontrib-asyncio']
+    'docs': ['sphinxcontrib-asyncio'],
+    'typings': ['mypy-extensions>=0.3.0', 'typing-extensions>=3.6.5']
 }
 
 setup(name='discord.py',
